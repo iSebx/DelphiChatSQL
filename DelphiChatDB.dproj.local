@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+  <Transactions>
+    <Transaction>2019/04/09 15:03:46.040,=C:\Users\sliotta\Documents\RAD Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2019/04/09 15:08:11.891,C:\Users\sliotta\Documents\Seb\Proyect\DelphiChatDB\U_InitSession.pas=C:\Users\sliotta\Documents\RAD Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2019/04/09 15:08:11.891,C:\Users\sliotta\Documents\Seb\Proyect\DelphiChatDB\U_InitSession.dfm=C:\Users\sliotta\Documents\RAD Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2019/04/09 15:08:19.200,C:\Users\sliotta\Documents\Seb\Proyect\DelphiChatDB\DelphiChatDB.dproj=C:\Users\sliotta\Documents\RAD Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>2019/04/09 15:08:32.270,=C:\Users\sliotta\Documents\Seb\Proyect\DelphiChatDB\Unit1.pas</Transaction>
+    <Transaction>2019/04/09 15:23:44.499,C:\Users\sliotta\Documents\Seb\Proyect\DelphiChatDB\U_User.pas=C:\Users\sliotta\Documents\Seb\Proyect\DelphiChatDB\Unit1.pas</Transaction>
+    <Transaction>2019/04/09 15:31:20.060,=C:\Users\sliotta\Documents\Seb\Proyect\DelphiChatDB\Unit1.pas</Transaction>
+    <Transaction>2019/04/09 15:35:28.680,C:\Users\sliotta\Documents\Seb\Proyect\DelphiChatDB\U_FrmOnLine.dfm=C:\Users\sliotta\Documents\Seb\Proyect\DelphiChatDB\Unit1.dfm</Transaction>
+    <Transaction>2019/04/09 15:35:28.680,C:\Users\sliotta\Documents\Seb\Proyect\DelphiChatDB\U_FrmOnLine.pas=C:\Users\sliotta\Documents\Seb\Proyect\DelphiChatDB\Unit1.pas</Transaction>
+    <Transaction>2019/04/09 15:35:35.118,=C:\Users\sliotta\Documents\Seb\Proyect\DelphiChatDB\Unit1.pas</Transaction>
+    <Transaction>2019/04/09 15:39:35.836,C:\Users\sliotta\Documents\Seb\Proyect\DelphiChatDB\U_FrmConversation.pas=C:\Users\sliotta\Documents\Seb\Proyect\DelphiChatDB\Unit1.pas</Transaction>
+    <Transaction>2019/04/09 15:39:35.836,C:\Users\sliotta\Documents\Seb\Proyect\DelphiChatDB\U_FrmConversation.dfm=C:\Users\sliotta\Documents\Seb\Proyect\DelphiChatDB\Unit1.dfm</Transaction>
+    <Transaction>2019/04/09 16:44:58.071,=C:\Users\sliotta\Documents\Seb\Proyect\DelphiChatDB\Unit1.pas</Transaction>
+    <Transaction>2019/04/09 17:07:43.277,C:\Users\sliotta\Documents\Seb\Proyect\DelphiChatDB\U_StoredProceduresInterface.pas=C:\Users\sliotta\Documents\Seb\Proyect\DelphiChatDB\Unit1.pas</Transaction>
+  </Transactions>
+</BorlandProject>
