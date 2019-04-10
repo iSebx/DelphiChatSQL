@@ -14,7 +14,5 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(Tfrm_InittSession, frm_InittSession);
-  Application.CreateForm(Tfrm_OnLine, frm_OnLine);
-  Application.CreateForm(Tfrm_Conversation, frm_Conversation);
   Application.Run;
 end.

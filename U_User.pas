@@ -29,19 +29,26 @@ type
       property Mail: String read FMail write SetMail;
       property ConnectState: TConnectState read FConnectState write SetConnectState;
       property Avatar: TBitmap read FImage write SetImage;
+      property UserId: Integer read FUserID write SetUserID;
   end;
 
   TContact = class (TUser)
     private
-      WDW_Conversation: TForm;
+      FWDW_Conversation: TForm;
       FIsActive: Boolean;
+      FIndex: Integer;
 
       procedure SetIsActive (value: Boolean);
+      procedure SetIndex (Value: Integer);
     public
       Constructor Create;
       destructor Destroy;
+
+      procedure AssignWdwConversation (value: TForm);
     published
       property IsActive: Boolean read FIsActive write SetIsActive;
+      property Conversation: TForm read FWDW_Conversation write AssignWdwConversation;
+      property UserIndex: Integer read FIndex write SetIndex;
   end;
 
 implementation
@@ -103,15 +110,24 @@ begin
   self.FIsActive:=value;
 end;
 
+procedure TContact.SetIndex (Value: Integer);
+begin
+  FIndex:= value;
+end;
 //PUBLIC IMPLEMENTATIONS
 constructor TContact.Create;
 begin
-  ///Creacion de ventana
+  FWDW_Conversation:=TForm.Create(nil);
+end;
+
+procedure TContact.AssignWdwConversation (value: TForm);
+begin
+  if Assigned(FWDW_Conversation) then FWDW_Conversation:= value;
 end;
 
 destructor TContact.Destroy;
 begin
-  self.WDW_Conversation.Free;
+  self.Conversation.Free;
 end;
 
 end. //End U_User
