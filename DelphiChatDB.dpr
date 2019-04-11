@@ -6,7 +6,8 @@ uses
   U_User in 'U_User.pas',
   U_FrmOnLine in 'U_FrmOnLine.pas' {frm_OnLine},
   U_FrmConversation in 'U_FrmConversation.pas' {frm_Conversation},
-  U_StoredProceduresInterface in 'U_StoredProceduresInterface.pas';
+  U_StoredProceduresInterface in 'U_StoredProceduresInterface.pas',
+  U_Central_Unit in 'U_Central_Unit.pas';
 
 {$R *.res}
 

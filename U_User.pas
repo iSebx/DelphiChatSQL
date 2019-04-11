@@ -2,7 +2,7 @@ unit U_User;
 
 interface
 
-Uses Graphics, Forms;
+Uses Graphics, Forms, Classes;
 
 type
 
@@ -32,6 +32,7 @@ type
       property UserId: Integer read FUserID write SetUserID;
   end;
 
+  TContactList = TList;
   TContact = class (TUser)
     private
       FWDW_Conversation: TForm;

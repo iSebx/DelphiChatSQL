@@ -52,13 +52,13 @@ var
   iCount: Integer;
 begin
   aux:= TMessageList.Create;
-  aux:= MessageReading(Owner);
+  //aux:= MessageReading(Owner);
   mm_Message.Lines.Add ('----Mensajes Leidos----');
   for iCount := 0 to aux.Count-1 do begin
       mm_Message.Lines.Add (lbl_Contact.Caption+' dice: '+TMessageInfo(aux.Items[iCount]).Line);
   end;
   mm_Message.Lines.Add ('----Mensajes Sin Leer----');
-  aux:= MessageUnReading(Owner);
+  //aux:= MessageUnReading(Owner);
   for iCount := 0 to aux.Count-1 do begin
       mm_Message.Lines.Add (lbl_Contact.Caption+' dice: '+TMessageInfo(aux.Items[iCount]).Line);
   end;
