@@ -37,9 +37,16 @@ implementation
 procedure Tfrm_InittSession.btn_connectClick(Sender: TObject);
 begin
   DelphiChat.UsedConnection:= ADO_Connection;
-  Delphi
-  //verifica que el usuario exista
-  //abre la ventana de chat
+  DelphiChat.User.UserId:=UserExist (DelphiChat.UsedConnection, e_UserName.Text, e_Password.Text);
+  if DelphiChat.User.UserId<>-1 then begin
+    DelphiChat.User:= GetUserInfo(DelphiChat.UsedConnection, DelphiChat.User.UserId);
+    //Crea la ventana e inicializa valores
+    frm_OnLine:= Tfrm_OnLine.Create(self);
+    frm_OnLine.ShowModal
+  end
+  else
+    ShowMessage('NO Encontrado');
+
 end;
 
 procedure Tfrm_InittSession.FormCreate(Sender: TObject);

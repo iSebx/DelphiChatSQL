@@ -1924,7 +1924,7 @@ object frm_OnLine: Tfrm_OnLine
     Height = 386
     ItemHeight = 13
     Items.Strings = (
-      'Cuchu (cuchu@hotmail.com)')
+      '')
     TabOrder = 0
     OnDblClick = lb_ContactDblClick
   end
@@ -1962,7 +1962,7 @@ object frm_OnLine: Tfrm_OnLine
     Left = 24
     Top = 520
     Width = 265
-    Height = 25
+    Height = 21
     TabOrder = 4
     Text = 'Cuchu'
   end

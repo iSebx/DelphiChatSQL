@@ -35,20 +35,19 @@ type
   TContactList = TList;
   TContact = class (TUser)
     private
-      FWDW_Conversation: TForm;
-      FIsActive: Boolean;
+      FIsActive: Boolean; ///----> no me acuerdo para que era
       FIndex: Integer;
 
       procedure SetIsActive (value: Boolean);
       procedure SetIndex (Value: Integer);
     public
-      Constructor Create;
+      WDW_Conversation: TForm;
+      Constructor Create (_idx: integer);
       destructor Destroy;
 
-      procedure AssignWdwConversation (value: TForm);
+      function GetIndex: Integer;
     published
       property IsActive: Boolean read FIsActive write SetIsActive;
-      property Conversation: TForm read FWDW_Conversation write AssignWdwConversation;
       property UserIndex: Integer read FIndex write SetIndex;
   end;
 
@@ -116,19 +115,20 @@ begin
   FIndex:= value;
 end;
 //PUBLIC IMPLEMENTATIONS
-constructor TContact.Create;
+constructor TContact.Create(_idx: integer);
 begin
-  FWDW_Conversation:=TForm.Create(nil);
+  self.FIndex:= _idx;
+  //FWDW_Conversation:=TForm.Create(nil);
 end;
 
-procedure TContact.AssignWdwConversation (value: TForm);
+function TContact.GetIndex: Integer;
 begin
-  if Assigned(FWDW_Conversation) then FWDW_Conversation:= value;
+  result:= FIndex;
 end;
 
 destructor TContact.Destroy;
 begin
-  self.Conversation.Free;
+  self.WDW_Conversation.Free;
 end;
 
 end. //End U_User

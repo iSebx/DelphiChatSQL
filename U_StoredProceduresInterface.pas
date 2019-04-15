@@ -1,7 +1,7 @@
 unit U_StoredProceduresInterface;
 
 interface
-uses Data.Win.ADODB, Data.DB, classes, U_User, graphics ;
+uses Data.Win.ADODB, Data.DB, classes, U_User, graphics, SysUtils ;
 
 type
   TMessageList = TList;
@@ -35,13 +35,14 @@ type
 
 
 ///DB StoredProcedure Interfaces
-function UserExist(ActualConnection:TADOConnection;_user: String; _pass: String): Boolean;
+function UserExist(ActualConnection:TADOConnection;_user: String; _pass: String): integer;
 function MessageReading (ActualConnection:TADOConnection;_User: integer): TMessageList;
 function MessageUnReading (ActualConnection:TADOConnection;_User: integer): TMessageList;
 function GetAllMessage (ActualConnection:TADOConnection;_User: integer): TMessageList;
 function GetMessageInfo (ActualConnection:TADOConnection;_MessageID: Integer): TMessageInfo;
 function GetUserInfo (ActualConnection:TADOConnection;_User: integer): TUser;
 function AddUser (ActualConnection:TADOConnection;_UserID: integer; _nick: String; _pass: String; _Avatar: TBitmap; _email:string) : integer;
+function GetContactList (ActualConnection: TADOConnection; _UserID:integer): TContactList;
 
 implementation
 
@@ -98,9 +99,10 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 /////////// DATA_BASE STORE_PROCEDURES IMPLEMENTATIOS
 ////////////////////////////////////////////////////////////////////////////////
-function UserExist(ActualConnection:TADOConnection; _user: String; _pass: String): Boolean;
+function UserExist(ActualConnection:TADOConnection; _user: String; _pass: String): integer;
 var
   SP: TADOStoredProc;
+  _ID: integer;
 begin
   SP:=TADOStoredProc.Create(nil);
   with SP do begin
@@ -111,12 +113,14 @@ begin
     //Limpio y refresco
     Parameters.refresh;
     //Asigno valores de entrada
-    Parameters.ParamByName('@USER').Value:=_user;
-    Parameters.ParamByName('@PASS').Value:=_pass;
+    Parameters.ParamByName('@_USER').Value:=_user;
+    Parameters.ParamByName('@_PASS').Value:=_pass;
+    Parameters.ParamByName('@_ID').Value:=_ID;
     //Ejecuto el SP
     ExecProc;
     //Evaluo resultado
-    if Parameters.ParamByName('@RETURN_VALUE').Value = 1 then result:=true else result:=False;
+    _ID:=Integer(Parameters.ParamByName('@_ID').Value);
+    result:= _ID;
   end;
 end;
 
@@ -226,6 +230,37 @@ begin
   result:=list;
 end;
 
+function GetContactList (ActualConnection: TADOConnection; _UserID:integer): TContactList;
+var
+  SP: TADOStoredProc;
+  list: TContactList;
+  aux: TUser;
+  i: integer;
+begin
+  list:= TContactList.Create;
+  aux:= TUser.Create;
+  SP:= TADOStoredProc.Create(nil);
+  i:=0;
+  SP.Connection:= ActualConnection;
+  SP.ProcedureName:= 'Get_Contact_User';
+  SP.Parameters.Refresh;
+  SP.Parameters.ParamByName('@_UserID').Value:=_UserID;
+  SP.ExecProc;
+  SP.Open;
+  while not SP.Eof do begin
+    list.Add(TContact.Create(i));
+    Aux:= GetUserInfo(ActualConnection, SP.FieldByName('User_ID2').Value);
+    TContact(list.Items[i]).Nick:=  StringReplace(aux.Nick, ' ','', [rfReplaceAll]);
+    TContact(list.Items[i]).Mail:= StringReplace (aux.Mail, ' ','', [rfReplaceAll]);
+    TContact(list.Items[i]).ConnectState:=aux.ConnectState;
+//    TContact(list.Items[i]).Avatar:=aux.Avatar;
+    TContact(list.Items[i]).UserId:=aux.UserId;
+    inc(i);
+    SP.Next;
+  end;
+  result:=list;
+end;
+
 function GetMessageInfo (ActualConnection:TADOConnection;_MessageID: Integer): TMessageInfo;
 var
   infoMsj: TMessageInfo;
@@ -261,7 +296,7 @@ begin
   SP.Connection:= ActualConnection;
   SP.ProcedureName:='Get_User_Info';
   SP.Parameters.Refresh;
-  SP.Parameters.ParamByName('@user');
+  SP.Parameters.ParamByName('@user').Value:=_User;
   SP.ExecProc;
   SP.Open;
   usrInfo.UserId       := SP.FieldByName('User_ID').Value;

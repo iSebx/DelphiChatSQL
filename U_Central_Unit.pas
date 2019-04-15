@@ -9,15 +9,19 @@ type
   TDelphiChat = Class
     private
       FUser: TUser;
-      FContacts: TContactList;
+      //Contacts: TContactList;
       FUsedConnection: TADOConnection;
 
       procedure SetConnection (cnx: TADOConnection);
+      procedure SetUser (Value: TUser);
     public
+      Contacts: TContactList;
+
       Constructor Create;
       Destructor Destroy;
       function AssignUser (_user:string; _Pass:string): integer; //1 error
     published
+      property User: TUser read FUser write SetUser;
       property UsedConnection: TADOConnection read FUsedConnection write SetConnection;
   End;
 
@@ -38,7 +42,7 @@ end;
 
 function TDelphiChat.AssignUser (_user:string; _Pass:string): integer; //1 error
 begin
-  if (UserExist(self.FUsedConnection, _user, _pass)) then begin
+  if (UserExist(self.FUsedConnection, _user, _pass)<>0) then begin
     self.FUser:= GetUserInfo(self.FUsedConnection, 1001); //Copia los Datos de Usuario a la central
     result:= 0;
   end else begin
@@ -46,17 +50,22 @@ begin
   end;
 end;
 
+procedure TDelphiChat.SetUser (Value: TUser);
+begin
+  FUser:= value;
+end;
+
 Constructor TDelphiChat.Create;
 begin
     Self.FUser:= TUser.Create;
-    Self.FContacts:= TContactList.Create;
+    Self.Contacts:= TContactList.Create;
     self.FUsedConnection:= TADOConnection.Create(nil);
 end;
 
 Destructor TDelphiChat.Destroy;
 begin
   self.FUser.Free;
-  self.FContacts.Free;
+  self.Contacts.Free;
   self.FUsedConnection.Free
 end;
 

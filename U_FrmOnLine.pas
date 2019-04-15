@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls,
-  Vcl.Imaging.pngimage, U_User, U_FrmConversation;
+  Vcl.Imaging.pngimage, U_User, U_FrmConversation, U_Central_Unit, U_StoredProceduresInterface;
 
 type
   Tfrm_OnLine = class(TForm)
@@ -42,28 +42,33 @@ procedure Tfrm_OnLine.FormCreate(Sender: TObject);
 Var
   newContatc: TContact;
   wdwContact: Tfrm_Conversation;
+  I: Integer;
 begin
-  ContactList:= TList.Create;
-  ContactList.Clear;
-
-  newContatc:= TContact.Create;
-  with newContatc do begin
-    Nick:= 'Cuchu';
-    Mail:= 'cuchu@hotmail.com';
-    ConnectState:= CS_CONNECT;
-    wdwContact:= Tfrm_Conversation.Create(self);
-    wdwContact.lbl_Contact.Caption:= Nick;
-    wdwContact.Owner:= 1001;
-    AssignWdwConversation(TForm(wdwContact));
-    ContactList.Add(newContatc);
-    UserIndex:=1;
-    //wdwContact.ShowModal;
-  end;
+// Configura Datos de Usuario DelphiChat.User
+  lbl_User.Caption:= DelphiChat.User.Nick;
+  DelphiChat.User.Nick:= StringReplace(DelphiChat.User.Nick,' ','', [rfReplaceAll]);
+  self.Caption:= DelphiChat.User.Nick + ' - ('+DelphiChat.User.Mail+')';
+// Descarga Lista de Contactos
+  DelphiChat.Contacts:= GetContactList(DelphiChat.UsedConnection, DelphiChat.User.UserId);
+// Arma Lista de Contactos
+  self.lb_Contact.Clear;
+  for I := 0 to DelphiChat.Contacts.Count-1 do
+    Self.lb_Contact.Items.Add(TContact(DelphiChat.Contacts.Items[I]).Nick + ' - ('+TContact(DelphiChat.Contacts.Items[I]).Mail+')');
 end;
 
 procedure Tfrm_OnLine.lb_ContactDblClick(Sender: TObject);
+var
+  aux: Tfrm_Conversation;
 begin
-  TContact(ContactList.Items[lb_Contact.ItemIndex]).Conversation.ShowModal;
+  //Si No tiene Ventana de Conversacion la crea, si tiene solo la muestra
+  if  (TContact(DelphiChat.Contacts.Items[lb_Contact.ItemIndex]).WDW_Conversation=nil) then
+  begin
+    TContact(DelphiChat.Contacts.Items[lb_Contact.ItemIndex]).WDW_Conversation:= Tfrm_Conversation.Create(Owner);
+    TContact(DelphiChat.Contacts.Items[lb_Contact.ItemIndex]).WDW_Conversation.Caption:= TContact(DelphiChat.Contacts.Items[lb_Contact.ItemIndex]).Nick;
+    aca te quedaste!!!!
+    //ConfigurarVentana
+  end;
+    Tfrm_Conversation (TContact(DelphiChat.Contacts.Items[lb_Contact.ItemIndex]).WDW_Conversation).Show;
 end;
 
 end.
