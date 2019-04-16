@@ -36,13 +36,14 @@ type
 
 ///DB StoredProcedure Interfaces
 function UserExist(ActualConnection:TADOConnection;_user: String; _pass: String): integer;
-function MessageReading (ActualConnection:TADOConnection;_User: integer): TMessageList;
-function MessageUnReading (ActualConnection:TADOConnection;_User: integer): TMessageList;
-function GetAllMessage (ActualConnection:TADOConnection;_User: integer): TMessageList;
+function MessageReading (ActualConnection:TADOConnection;_User: integer; _User2: integer): TMessageList;
+function MessageUnReading (ActualConnection:TADOConnection;_User: integer; _User2: integer): TMessageList;
+function GetAllMessage (ActualConnection:TADOConnection;_User: integer; _User2: integer): TMessageList;
 function GetMessageInfo (ActualConnection:TADOConnection;_MessageID: Integer): TMessageInfo;
 function GetUserInfo (ActualConnection:TADOConnection;_User: integer): TUser;
-function AddUser (ActualConnection:TADOConnection;_UserID: integer; _nick: String; _pass: String; _Avatar: TBitmap; _email:string) : integer;
+function AddUser (ActualConnection:TADOConnection;_nick: String; _pass: String; _Avatar: TBitmap; _email:string) : integer;
 function GetContactList (ActualConnection: TADOConnection; _UserID:integer): TContactList;
+function InsertMessage  (ActualConnection: TADOConnection; _Sender: integer; _Reciver:Integer; Msg: String): Integer;
 
 implementation
 
@@ -124,7 +125,7 @@ begin
   end;
 end;
 
-function MessageReading (ActualConnection:TADOConnection;_User: integer): TMessageList;
+function MessageReading (ActualConnection:TADOConnection;_User: integer; _User2: integer): TMessageList;
 var
   SP: TADOStoredProc;
   list: TMessageList;
@@ -138,6 +139,7 @@ begin
     ProcedureName:= 'Message_Readed';
     Parameters.Refresh;
     Parameters.ParamByName('@User').Value:= _User;
+    Parameters.ParamByName('@_User2').Value:=_User2;
     ExecProc;
     SP.Open;
     while not eof do begin
@@ -158,7 +160,7 @@ begin
   end;
 end;
 
-function MessageUnReading (ActualConnection:TADOConnection;_User: integer): TMessageList;
+function MessageUnReading (ActualConnection:TADOConnection;_User: integer; _User2: integer): TMessageList;
 var
   SP: TADOStoredProc;
   list: TMessageList;
@@ -174,6 +176,7 @@ begin
     ProcedureName:= 'Message_Unreaded';
     Parameters.Refresh;
     Parameters.ParamByName('@User').Value:= _User;
+    Parameters.ParamByName('@_User2').Value:=_User2;
     ExecProc;
     SP.Open;
     while not sp.eof do begin
@@ -194,7 +197,7 @@ begin
   result:=list;
 end;
 
-function GetAllMessage (ActualConnection:TADOConnection;_User: integer): TMessageList;
+function GetAllMessage (ActualConnection:TADOConnection;_User: integer; _User2: integer): TMessageList;
 var
   SP: TADOStoredProc;
   list: TMessageList;
@@ -210,7 +213,8 @@ begin
     ProcedureName:= 'All_Message';
     Parameters.Refresh;
     Parameters.ParamByName('@User').Value:= _User;
-    ExecProc;
+    Parameters.ParamByName('@_User2').Value:=_User2;
+   ExecProc;
     SP.Open;
     while not sp.eof do begin
       List.Add(TMessageInfo.create);
@@ -311,21 +315,38 @@ begin
   result:= usrInfo;
 end;
 
-function AddUser (ActualConnection:TADOConnection;_UserID: integer; _nick: String; _pass: String; _Avatar: TBitmap; _email:string) : integer;
+function AddUser (ActualConnection:TADOConnection;_nick: String; _pass: String; _Avatar: TBitmap; _email:string) : integer;
 var
   SP: TADOStoredProc;
+  _ra: integer;
 begin
   SP:=TADOStoredProc.Create(nil);
   SP.Connection:= ActualConnection;
   SP.ProcedureName:='Add_User';
   SP.Parameters.Refresh;
-  SP.Parameters.ParamByName('@UserID').Value:= _UserID;
   SP.Parameters.ParamByName('@Nick').Value:= _nick;
   SP.Parameters.ParamByName('@Pass').Value:= _pass;
-  //SP.Parameters.ParamByName('@Avatar').Value:= _Avatar;
+//  SP.Parameters.ParamByName('@Avatar').Value:= nil;
   SP.Parameters.ParamByName('@email').Value:= _email;
+  SP.Parameters.ParamByName('@Row_Affected').Value:=_ra;
   SP.ExecProc;
-  SP.Open;
-  result:= SP.FieldByName('@Row_Affected').Value;
+{  SP.Open;
+  _ra:= SP.FieldByName('@Row_Affected').Value;
+  result:=_ra;}
 end;
+
+function InsertMessage  (ActualConnection: TADOConnection; _Sender: integer; _Reciver:Integer; Msg: String): Integer;
+var
+  SP: TADOStoredProc;
+begin
+  SP:= TADOStoredProc.Create(nil);
+  SP.Connection:= ActualConnection;
+  SP.ProcedureName:= 'Insert_Message';
+  SP.Parameters.Refresh;
+  SP.Parameters.ParamByName('@_Sender').Value:= _Sender;
+  SP.Parameters.ParamByName('@_Reciver').Value:= _Reciver;
+  SP.Parameters.ParamByName('@_Msj').Value:= Msg;
+  SP.ExecProc;
+end;
+
 end.

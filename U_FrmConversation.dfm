@@ -1938,4 +1938,10 @@ object frm_Conversation: Tfrm_Conversation
     TabOrder = 1
     OnClick = btn_SendClick
   end
+  object Timer1: TTimer
+    Interval = 3000
+    OnTimer = FormShow
+    Left = 528
+    Top = 48
+  end
 end

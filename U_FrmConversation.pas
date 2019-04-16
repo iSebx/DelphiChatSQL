@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
-  Vcl.Imaging.pngimage, U_User, U_StoredProceduresInterface, Data.Win.ADODB;
+  Vcl.Imaging.pngimage, U_User, U_StoredProceduresInterface, Data.Win.ADODB, U_Central_Unit;
 
 type
   Tfrm_Conversation = class(TForm)
@@ -14,6 +14,7 @@ type
     btn_Send: TButton;
     lbl_Contact: TLabel;
     img_ContactAvatar: TImage;
+    Timer1: TTimer;
     procedure btn_SendClick(Sender: TObject);
     procedure e_messageKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
@@ -21,7 +22,7 @@ type
     { Private declarations }
   public
     { Public declarations }
-    Owner: integer; //ID del que lo llama
+    Index: integer;
   end;
 
 var
@@ -34,6 +35,7 @@ implementation
 procedure Tfrm_Conversation.btn_SendClick(Sender: TObject);
 begin
   mm_Message.Lines.Add(e_message.Text);
+  InsertMessage(DelphiChat.UsedConnection, DelphiChat.User.UserId, Self.Index, e_message.Text);
   e_message.Text:='';
   e_message.SetFocus;
 end;
@@ -52,13 +54,14 @@ var
   iCount: Integer;
 begin
   aux:= TMessageList.Create;
-  //aux:= MessageReading(Owner);
-  mm_Message.Lines.Add ('----Mensajes Leidos----');
+  mm_Message.Clear;
+  aux:= MessageReading(DelphiChat.UsedConnection, DelphiChat.User.UserId, self.Index);
+//  mm_Message.Lines.Add ('----Mensajes Leidos----');
   for iCount := 0 to aux.Count-1 do begin
       mm_Message.Lines.Add (lbl_Contact.Caption+' dice: '+TMessageInfo(aux.Items[iCount]).Line);
   end;
-  mm_Message.Lines.Add ('----Mensajes Sin Leer----');
-  //aux:= MessageUnReading(Owner);
+//  mm_Message.Lines.Add ('----Mensajes Sin Leer----');
+  aux:= MessageUnReading(DelphiChat.UsedConnection, DelphiChat.User.UserId, self.Index);
   for iCount := 0 to aux.Count-1 do begin
       mm_Message.Lines.Add (lbl_Contact.Caption+' dice: '+TMessageInfo(aux.Items[iCount]).Line);
   end;

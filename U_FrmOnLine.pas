@@ -40,8 +40,6 @@ end;
 
 procedure Tfrm_OnLine.FormCreate(Sender: TObject);
 Var
-  newContatc: TContact;
-  wdwContact: Tfrm_Conversation;
   I: Integer;
 begin
 // Configura Datos de Usuario DelphiChat.User
@@ -57,15 +55,14 @@ begin
 end;
 
 procedure Tfrm_OnLine.lb_ContactDblClick(Sender: TObject);
-var
-  aux: Tfrm_Conversation;
 begin
   //Si No tiene Ventana de Conversacion la crea, si tiene solo la muestra
   if  (TContact(DelphiChat.Contacts.Items[lb_Contact.ItemIndex]).WDW_Conversation=nil) then
   begin
     TContact(DelphiChat.Contacts.Items[lb_Contact.ItemIndex]).WDW_Conversation:= Tfrm_Conversation.Create(Owner);
     TContact(DelphiChat.Contacts.Items[lb_Contact.ItemIndex]).WDW_Conversation.Caption:= TContact(DelphiChat.Contacts.Items[lb_Contact.ItemIndex]).Nick;
-    aca te quedaste!!!!
+    Tfrm_Conversation (TContact(DelphiChat.Contacts.Items[lb_Contact.ItemIndex]).WDW_Conversation).lbl_Contact.Caption:= TContact(DelphiChat.Contacts.Items[lb_Contact.ItemIndex]).Nick;
+    Tfrm_Conversation (TContact(DelphiChat.Contacts.Items[lb_Contact.ItemIndex]).WDW_Conversation).Index:= TContact(DelphiChat.Contacts.Items[lb_Contact.ItemIndex]).UserId;
     //ConfigurarVentana
   end;
     Tfrm_Conversation (TContact(DelphiChat.Contacts.Items[lb_Contact.ItemIndex]).WDW_Conversation).Show;

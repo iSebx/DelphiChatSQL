@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, Data.DB,
   Data.Win.ADODB, U_StoredProceduresInterface, U_FrmOnLine, U_User,
-  Vcl.Imaging.pngimage, U_Central_Unit;
+  Vcl.Imaging.pngimage, U_Central_Unit, U_frmRegister;
 
 type
   Tfrm_InittSession = class(TForm)
@@ -20,6 +20,7 @@ type
     ADO_Connection: TADOConnection;
     procedure btn_connectClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure btn_RegisterClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -36,11 +37,9 @@ implementation
 
 procedure Tfrm_InittSession.btn_connectClick(Sender: TObject);
 begin
-  DelphiChat.UsedConnection:= ADO_Connection;
   DelphiChat.User.UserId:=UserExist (DelphiChat.UsedConnection, e_UserName.Text, e_Password.Text);
   if DelphiChat.User.UserId<>-1 then begin
     DelphiChat.User:= GetUserInfo(DelphiChat.UsedConnection, DelphiChat.User.UserId);
-    //Crea la ventana e inicializa valores
     frm_OnLine:= Tfrm_OnLine.Create(self);
     frm_OnLine.ShowModal
   end
@@ -49,9 +48,18 @@ begin
 
 end;
 
+procedure Tfrm_InittSession.btn_RegisterClick(Sender: TObject);
+var
+  RegForm: TForm1;
+begin
+  RegForm:= TForm1.Create(self);
+  RegForm.ShowModal;
+end;
+
 procedure Tfrm_InittSession.FormCreate(Sender: TObject);
 begin
   DelphiChat:= TDelphiChat.Create;
+  DelphiChat.UsedConnection:= ADO_Connection;
 end;
 
 procedure Tfrm_InittSession.OpenOnlineWdw;

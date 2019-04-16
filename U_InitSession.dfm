@@ -1942,6 +1942,7 @@ object frm_InittSession: Tfrm_InittSession
     Height = 25
     Caption = 'Register'
     TabOrder = 3
+    OnClick = btn_RegisterClick
   end
   object ADO_Connection: TADOConnection
     Connected = True
