@@ -44,6 +44,7 @@ function GetUserInfo (ActualConnection:TADOConnection;_User: integer): TUser;
 function AddUser (ActualConnection:TADOConnection;_nick: String; _pass: String; _Avatar: TBitmap; _email:string) : integer;
 function GetContactList (ActualConnection: TADOConnection; _UserID:integer): TContactList;
 function InsertMessage  (ActualConnection: TADOConnection; _Sender: integer; _Reciver:Integer; Msg: String): Integer;
+function GetAllMessageEx (ActualConnection: TADOConnection; _Sender: Integer; _Reciver:Integer): TMessageList;
 
 implementation
 
@@ -347,6 +348,38 @@ begin
   SP.Parameters.ParamByName('@_Reciver').Value:= _Reciver;
   SP.Parameters.ParamByName('@_Msj').Value:= Msg;
   SP.ExecProc;
+end;
+
+function GetAllMessageEx (ActualConnection: TADOConnection; _Sender: Integer; _Reciver:Integer): TMessageList;
+var
+  SP: TADOStoredProc;
+  list: TMessageList;
+  i: integer;
+begin
+  SP:= TADOStoredProc.Create(nil);
+  SP.Connection:= ActualConnection;
+  SP.ProcedureName:= 'Get_All_MessageEx';
+  SP.Parameters.Refresh;
+  SP.Parameters.ParamByName('@_Sender').Value:= _Sender;
+  SP.Parameters.ParamByName('@_Reciver').Value:= _Reciver;
+  Sp.ExecProc;
+  Sp.Open;
+  list:= TMessageList.Create;
+  While not SP.eof do begin
+      List.Add(TMessageInfo.create);
+      TMessageInfo(List.Items[i]).ID:=SP.FieldByName('Message_ID').Value;
+      TMessageInfo(List.Items[i]).Line:=SP.FieldByName('Message').Value;
+      TMessageInfo(List.Items[i]).Sender:=SP.FieldByName('Sender_ID').Value;
+      TMessageInfo(List.Items[i]).Reciver:=SP.FieldByName('Reciver_ID').Value;
+      TMessageInfo(List.Items[i]).date:=TDate(SP.FieldByName('Date').Value);
+      if (SP.FieldByName('isSend').Value=0) then
+        TMessageInfo(List.Items[i]).state:= False
+      else
+        TMessageInfo(List.Items[i]).state:= true;
+      inc(i);
+      SP.Next;
+    end;
+  result:= list;
 end;
 
 end.

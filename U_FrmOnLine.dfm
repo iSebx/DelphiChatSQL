@@ -1964,6 +1964,5 @@ object frm_OnLine: Tfrm_OnLine
     Width = 265
     Height = 21
     TabOrder = 4
-    Text = 'Cuchu'
   end
 end

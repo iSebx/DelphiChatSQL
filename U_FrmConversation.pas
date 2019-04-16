@@ -55,15 +55,12 @@ var
 begin
   aux:= TMessageList.Create;
   mm_Message.Clear;
-  aux:= MessageReading(DelphiChat.UsedConnection, DelphiChat.User.UserId, self.Index);
-//  mm_Message.Lines.Add ('----Mensajes Leidos----');
+  aux:= GetAllMessageEx(DelphiChat.UsedConnection, DelphiChat.User.UserId, Self.Index);
   for iCount := 0 to aux.Count-1 do begin
-      mm_Message.Lines.Add (lbl_Contact.Caption+' dice: '+TMessageInfo(aux.Items[iCount]).Line);
-  end;
-//  mm_Message.Lines.Add ('----Mensajes Sin Leer----');
-  aux:= MessageUnReading(DelphiChat.UsedConnection, DelphiChat.User.UserId, self.Index);
-  for iCount := 0 to aux.Count-1 do begin
-      mm_Message.Lines.Add (lbl_Contact.Caption+' dice: '+TMessageInfo(aux.Items[iCount]).Line);
+      if TMessageInfo(aux.Items[iCount]).Sender=DelphiChat.User.UserId then
+        mm_Message.Lines.Add (DelphiChat.User.Nick+' dice: '+TMessageInfo(aux.Items[iCount]).Line)
+      else
+        mm_Message.Lines.Add (self.lbl_Contact.Caption+' dice: '+TMessageInfo(aux.Items[iCount]).Line)
   end;
 end;
 
